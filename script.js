@@ -10,22 +10,20 @@ function createOl(n, d) {
     return ol;
 }
 
-const createDom = (n, d) => d === 0 ? document.createTextNode(lorem) : createOl(n, d);
+const createDom = (n, d) => d > 0 ? createOl(n, d) : document.createTextNode(lorem);
 
-const createHtml = (n, d) => d === 0 ? lorem : `<ol>${`<li>${createHtml(n, d - 1)}</li>`.repeat(n)}</ol>`;
+const createHtml = (n, d) => d > 0 ? `<ol>${`<li>${createHtml(n, d - 1)}</li>`.repeat(n)}</ol>` : lorem;
 
 window.addEventListener('load', function () {
     const [root1, root2] = document.getElementsByClassName('root');
     const length = 10, depth = 5;
+    
     console.time('innerhtml');
-    {
-        root1.innerHTML = createHtml(length, depth);
-    }
+    root1.innerHTML = createHtml(length, depth);
     console.timeLog('innerhtml');
+
     console.time('appendchild');
-    {
--        root2.appendChild(createDom(length, depth));
-    }
+    root2.appendChild(createDom(length, depth));
     console.timeLog('appendchild');
 });
 
